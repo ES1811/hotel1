@@ -7,7 +7,7 @@
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=hotel3;user=root;password=<your-password>;"
+    "DefaultConnection": "Server=localhost;Database=hotel3;user=root;password=Kodehode2024;"
   }
 
 }

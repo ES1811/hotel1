@@ -30,8 +30,9 @@ namespace hotel1.Controllers
         }
 
         //  Get all rooms (optionally by hotel)
+        //------- json serialization issue
         [HttpGet]
-        public async Task<IActionResult> GetRooms([FromQuery] int? hotelId)
+        public async Task<IActionResult> GetRooms([FromBody] int? hotelId)
         {
             var rooms = hotelId == null
                 ? await _context.Rooms.Include(r => r.Hotel).ToListAsync()
