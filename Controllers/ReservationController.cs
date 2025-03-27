@@ -16,6 +16,7 @@ namespace hotel1.Controllers
         }
 
         [HttpPost("make")]
+        //----- all controllers below are nested within a single controller thus making it impossible for CRUD
         public async Task<IActionResult> MakeReservation(int customerId)
         {
             // 1. Find available room

@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace hotel1.Model
 {
@@ -7,10 +9,14 @@ namespace hotel1.Model
         [Key]
         public int Id { get; set; }
 
+        [ForeignKey("CustomerId")]
         public int CustomerId { get; set; }
+        [JsonIgnore]
         public Customer? Customer { get; set; }
 
+        [ForeignKey("RoomId")]
         public int RoomId { get; set; }
+        [JsonIgnore]
         public Room? Room { get; set; }
 
         public DateTime CheckInDate { get; set; }

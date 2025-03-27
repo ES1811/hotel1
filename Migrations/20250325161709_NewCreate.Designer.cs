@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hotel1.Model;
 
@@ -11,9 +12,11 @@ using hotel1.Model;
 namespace hotel1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250325161709_NewCreate")]
+    partial class NewCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,9 +95,11 @@ namespace hotel1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
 
-                    b.HasIndex("RoomId");
+                    b.HasIndex("RoomId")
+                        .IsUnique();
 
                     b.ToTable("Reservations");
                 });
@@ -143,14 +148,14 @@ namespace hotel1.Migrations
             modelBuilder.Entity("hotel1.Model.Reservation", b =>
                 {
                     b.HasOne("hotel1.Model.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .WithOne()
+                        .HasForeignKey("hotel1.Model.Reservation", "CustomerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("hotel1.Model.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId")
+                        .WithOne()
+                        .HasForeignKey("hotel1.Model.Reservation", "RoomId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

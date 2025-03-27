@@ -16,6 +16,7 @@ namespace hotel1.Controllers
         }
 
         //  Create a new customer
+        //---- json serialization issue
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([FromBody] Customer customer)
         {
@@ -34,8 +35,8 @@ namespace hotel1.Controllers
         public async Task<ActionResult<List<Customer>>> GetCustomers()
         {
             var customers = await _context.Customers
-                .Include(c => c.Hotel)
-                .Include(c => c.Room)
+                // .Include(c => c.Hotel) --- does it need to show the entire hotel? lol
+                // .Include(c => c.Room) -- this could be optional
                 .ToListAsync();
 
             return Ok(customers);
@@ -46,8 +47,8 @@ namespace hotel1.Controllers
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
             var customer = await _context.Customers
-                .Include(c => c.Hotel)
-                .Include(c => c.Room)
+                // .Include(c => c.Hotel)
+                // .Include(c => c.Room)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (customer == null)

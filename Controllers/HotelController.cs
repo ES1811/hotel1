@@ -17,12 +17,13 @@ namespace hotel1.Controllers
         }
 
         //  Create a new hotel
+        //-------- it shouldn't be using CreateHotelRequest DTO to create the hotel in the first place
         [HttpPost]
-        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelRequest request)
+        public async Task<IActionResult> CreateHotel([FromBody] /*CreateHotelRequest*/Hotel request)
         {
             if (string.IsNullOrWhiteSpace(request.Name))
                 return BadRequest("Hotel name is required.");
-            if (request.RoomCount <= 0)
+            if (request.Rooms == null)
                 return BadRequest("RoomCount must be greater than 0.");
 
             var hotel = new Hotel
@@ -31,7 +32,7 @@ namespace hotel1.Controllers
                 Rooms = new List<Room>()
             };
 
-            for (int i = 1; i <= request.RoomCount; i++)
+            for (int i = 1; i <= request.Rooms.Count; i++)
             {
                 hotel.Rooms.Add(new Room
                 {
@@ -47,10 +48,11 @@ namespace hotel1.Controllers
         }
 
         //  Get all hotels
+        //------ because of the incorrect Hotel creation, it also doesn't show rooms or customers
         [HttpGet]
         public async Task<ActionResult<List<Hotel>>> GetHotels()
         {
-            var hotels = await _context.Hotels.ToListAsync();
+            var hotels = await _context.Hotels.Include(c => c.Customers).Include(r => r.Rooms).ToListAsync(); //-----include rooms and customers too
             return Ok(hotels);
         }
 
@@ -58,7 +60,7 @@ namespace hotel1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Hotel>> GetHotel(int id)
         {
-            var hotel = await _context.Hotels.FindAsync(id);
+            var hotel = await _context.Hotels.Include(c=>c.Customers).Include(r=>r.Rooms).FirstOrDefaultAsync(h => h.Id == id);
             if (hotel == null)
                 return NotFound("Hotel not found.");
 
